@@ -15,10 +15,13 @@ import LiveQuizStudentPage from './pages/LiveQuizStudentPage';
 import MyQuizHistoryPage from './pages/MyQuizHistoryPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import AboutPage from './pages/AboutPage';
+import { useNotification } from './contexts/NotificationContext';
+import Notification from './components/Notification';
 
 function App() {
   // Kullanıcı bilgisini localStorage'dan al
   const user = JSON.parse(localStorage.getItem('user'));
+  const { notification, closeNotification } = useNotification();
 
   return (
     // Tüm uygulama için router ve route tanımları
@@ -47,6 +50,10 @@ function App() {
         <Route path="/admin" element={<AdminPanelPage />} />
         <Route path="/about" element={<AboutPage />} />
       </Routes>
+      {/* Bildirim kutusu */}
+      {notification && (
+        <Notification {...notification} onClose={closeNotification} />
+      )}
     </Router>
   );
 }

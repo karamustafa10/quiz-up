@@ -16,15 +16,14 @@ import { register } from '../services/authService';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Loader from '../components/Loader';
 import { useNotification } from '../contexts/NotificationContext';
 
 function RegisterPage() {
-  // Navigation and notification hooks
+  // Navigasyon ve bildirim hook'ları
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  // Component state management
+  // Form ve kullanıcı state'leri
   const [formData, setFormData] = useState({ 
     username: '', 
     email: '', 
@@ -35,7 +34,7 @@ function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Check for existing user session and redirect if authenticated
+  // Kullanıcı oturumunu kontrol et ve yönlendir
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
@@ -44,12 +43,12 @@ function RegisterPage() {
     }
   }, [navigate]);
 
-  // Handle form input changes
+  // Form input değişikliklerini işle
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle form submission and registration
+  // Form gönderimini işle
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -71,14 +70,14 @@ function RegisterPage() {
     }
   };
 
-  // Handle user logout
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  // Handle profile edit notification
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };
@@ -90,6 +89,7 @@ function RegisterPage() {
         <div className="w-full max-w-md bg-base dark:bg-base-dark rounded-2xl shadow-lg p-10 flex flex-col items-center border border-neutral dark:border-neutral-dark">
           <h2 className="text-3xl font-extrabold mb-6 text-primary-dark dark:text-primary text-center">Kayıt Ol</h2>
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
+            {/* Kullanıcı adı inputu */}
             <input
               type="text"
               name="username"
@@ -99,6 +99,7 @@ function RegisterPage() {
               required
               className="w-full py-3 px-4 rounded-2xl border border-neutral dark:border-neutral-dark bg-base dark:bg-base-dark text-neutral-dark dark:text-neutral text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
+            {/* Email inputu */}
             <input
               type="email"
               name="email"
@@ -108,6 +109,7 @@ function RegisterPage() {
               required
               className="w-full py-3 px-4 rounded-2xl border border-neutral dark:border-neutral-dark bg-base dark:bg-base-dark text-neutral-dark dark:text-neutral text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
+            {/* Şifre inputu */}
             <input
               type="password"
               name="password"
@@ -117,6 +119,7 @@ function RegisterPage() {
               required
               className="w-full py-3 px-4 rounded-2xl border border-neutral dark:border-neutral-dark bg-base dark:bg-base-dark text-neutral-dark dark:text-neutral text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
+            {/* Rol seçimi */}
             <select
               name="role"
               value={formData.role}

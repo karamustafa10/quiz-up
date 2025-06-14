@@ -16,21 +16,20 @@ import { login } from '../services/authService';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Loader from '../components/Loader';
 import { useNotification } from '../contexts/NotificationContext';
 
 function LoginPage() {
-  // Navigation and notification hooks
+  // Navigasyon ve bildirim hook'ları
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  // Component state management
+  // Form ve kullanıcı state'leri
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Check for existing user session and redirect if authenticated
+  // Kullanıcı oturumunu kontrol et ve yönlendir
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
@@ -39,12 +38,12 @@ function LoginPage() {
     }
   }, [navigate]);
 
-  // Handle form input changes
+  // Form input değişikliklerini işle
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle form submission and authentication
+  // Form gönderimini işle
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -68,14 +67,14 @@ function LoginPage() {
     }
   };
 
-  // Handle user logout
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  // Handle profile edit notification
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };

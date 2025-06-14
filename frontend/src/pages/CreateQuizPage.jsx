@@ -18,7 +18,6 @@ import { createQuiz } from '../services/quizService';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Loader from '../components/Loader';
 import { useNotification } from '../contexts/NotificationContext';
 
 function CreateQuizPage() {

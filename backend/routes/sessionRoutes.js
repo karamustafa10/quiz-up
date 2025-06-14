@@ -4,23 +4,25 @@ const { protect } = require('../middleware/authMiddleware');
 const Session = require('../models/Session');
 const generateJoinCode = require('../utils/generateJoinCode');
 
-// Session başlat (POST)
+// Yeni bir oturum başlatma endpoint'i
 router.post('/start', protect, async (req, res) => {
   try {
     const { quizId } = req.body;
 
+    // Quiz ID kontrolü
     if (!quizId) {
       return res.status(400).json({ message: "Quiz ID eksik" });
     }
 
+    // Yeni oturum nesnesi oluşturuluyor
     const newSession = new Session({
       quizId,
-      joinCode: generateJoinCode(),
+      joinCode: generateJoinCode(), // Katılım kodu üretiliyor
       started: false,
       students: []
     });
 
-    await newSession.save();
+    await newSession.save(); // Oturum veritabanına kaydediliyor
     res.json({ sessionId: newSession._id, joinCode: newSession.joinCode });
   } catch (err) {
     console.error('❌ Oturum başlatma hatası:', err);
@@ -28,10 +30,10 @@ router.post('/start', protect, async (req, res) => {
   }
 });
 
-
-// ✅ Session detaylarını getir (GET)
+// Belirli bir oturumun detaylarını getiren endpoint
 router.get('/:sessionId', async (req, res) => {
   try {
+    // Oturum ve ilişkili quiz bilgisi çekiliyor
     const session = await Session.findById(req.params.sessionId)
       .populate({
         path: 'quizId',

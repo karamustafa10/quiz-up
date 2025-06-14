@@ -1,14 +1,17 @@
+// Öğrenci lobisi sayfası (quiz başlamasını bekler)
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import socket from '../socket';
 import Card from '../components/Card';
 
 function StudentLobbyPage() {
+  // Parametre ve state'ler
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState('Quiz başlatılmayı bekliyor...');
   const emittedRef = useRef(false);
 
+  // Lobiye katılım ve quiz başlatma dinleme
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     const studentName = user?.username || 'Bilinmeyen Öğrenci';

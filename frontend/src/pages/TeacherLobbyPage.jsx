@@ -8,6 +8,7 @@ import Button from '../components/Button';
 import Badge from '../components/Badge';
 
 function TeacherLobbyPage() {
+  // Parametre ve state'ler
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
@@ -16,11 +17,12 @@ function TeacherLobbyPage() {
   const emittedRef = useRef(false);
   const [copied, setCopied] = useState(false);
 
+  // Lobiye giriş ve öğrenci dinleme
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     const teacherName = user?.username || 'Bilinmeyen Öğretmen';
 
-    // Kullanıcı öğretmen değilse dashboard'a yönlendir
+    // Sadece öğretmenler erişebilir
     if (!user || user.role !== 'teacher') {
       navigate('/dashboard');
       return;
@@ -42,6 +44,7 @@ function TeacherLobbyPage() {
     };
   }, [sessionId, navigate]);
 
+  // Quiz ve oturum bilgilerini çek
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -56,8 +59,8 @@ function TeacherLobbyPage() {
     fetchSession();
   }, [sessionId]);
 
+  // Quiz başlatma işlemi
   const currentQuiz = JSON.parse(localStorage.getItem('currentQuiz'));
-
   const handleStartQuiz = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
@@ -89,6 +92,7 @@ function TeacherLobbyPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-400 via-green-200 to-green-400 p-4">
       <Card className="w-full max-w-lg mx-auto animate-slide-in bg-gradient-to-br from-[#232526] to-[#414345] shadow-2xl rounded-3xl p-10 border-0 flex flex-col items-center">
         <h1 className="text-3xl font-bold mb-2">{quizTitle}</h1>
+        {/* Katılım kodu ve kopyalama */}
         <div className="mb-4 flex flex-col items-center">
           <span className="text-base text-neutral-200 mb-1">Katılım Kodu:</span>
           <div className="flex items-center gap-2">
@@ -109,6 +113,7 @@ function TeacherLobbyPage() {
             <span className="ml-2 text-green-400 text-sm animate-fade-in">Kopyalandı!</span>
           )}
         </div>
+        {/* Katılan öğrenciler listesi */}
         <h2 className="text-lg font-semibold mb-2">Katılan Öğrenciler</h2>
         {students.length === 0 ? (
           <p className="text-neutral-200 dark:text-white text-base font-medium mb-4">Henüz katılan öğrenci yok.</p>
@@ -119,6 +124,7 @@ function TeacherLobbyPage() {
             ))}
           </ul>
         )}
+        {/* Quiz başlat butonu */}
         <Button color="danger" className="w-full mt-2" onClick={handleStartQuiz}>
           Quiz'i Başlat
         </Button>

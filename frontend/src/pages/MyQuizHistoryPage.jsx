@@ -1,3 +1,4 @@
+// Kullanıcının quiz geçmişi sayfası
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -9,12 +10,14 @@ import Badge from '../components/Badge';
 import { useNotification } from '../contexts/NotificationContext';
 
 function MyQuizHistory() {
+  // State ve hook'lar
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
+  // Kullanıcı ve quiz geçmişini yükle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
@@ -29,12 +32,14 @@ function MyQuizHistory() {
     .finally(() => setLoading(false));
   }, []);
 
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };
@@ -46,6 +51,7 @@ function MyQuizHistory() {
         <div className="w-full max-w-2xl">
           <Card className="flex flex-col items-center">
             <h2 className="text-3xl font-extrabold mb-6 text-primary-dark dark:text-primary text-center">Quiz Geçmişim</h2>
+            {/* Quiz geçmişi listesi */}
             {loading ? (
               <div className="flex justify-center my-8"><Loader size={10} /></div>
             ) : results.length === 0 ? (

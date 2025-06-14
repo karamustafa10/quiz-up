@@ -1,3 +1,4 @@
+// Canlı quiz yönetim ekranı (öğretmen için)
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import socket from '../socket';
@@ -7,6 +8,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function LiveQuizTeacherPage() {
+  // Parametre ve state'ler
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(null);
@@ -18,10 +20,10 @@ function LiveQuizTeacherPage() {
   const [showScoreboard, setShowScoreboard] = useState(false);
   const [quizTitle, setQuizTitle] = useState('');
   const [creatorName, setCreatorName] = useState('');
-  const [questionTimer, setQuestionTimer] = useState(null);
   const [questionTimeLeft, setQuestionTimeLeft] = useState(0);
   const [questionLocked, setQuestionLocked] = useState(false);
 
+  // Quiz ve oturum bilgilerini çek
   useEffect(() => {
     const fetchQuizInfo = async () => {
       try {
@@ -33,6 +35,7 @@ function LiveQuizTeacherPage() {
     fetchQuizInfo();
   }, [sessionId]);
 
+  // Socket event'leri ile quiz akışını yönet
   useEffect(() => {
     const startCountdown = (sec, label) => {
       let counter = sec;
@@ -81,6 +84,7 @@ function LiveQuizTeacherPage() {
     };
   }, [sessionId, scoreboard, showFinal]);
 
+  // Soru için sayaç ve kilitleme
   useEffect(() => {
     let timerInterval;
     if (questionData && !correctOption) {
@@ -106,6 +110,7 @@ function LiveQuizTeacherPage() {
     <div className="min-h-screen flex flex-col font-sans bg-gradient-to-br from-primary/10 via-base/60 to-primary-dark/20 dark:from-base-dark dark:via-base-dark/80 dark:to-primary/20 transition-colors duration-700">
       <Header />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 w-full">
+        {/* Quiz tamamlandıysa final ekranı */}
         {showFinal ? (
           <div className="w-full max-w-2xl bg-base dark:bg-base-dark rounded-2xl shadow-lg p-8 flex flex-col items-center border border-success/40 dark:border-success/60 animate-fade-in">
             <div className="w-full flex flex-col gap-4">
@@ -127,6 +132,7 @@ function LiveQuizTeacherPage() {
                 <span className="text-xl">🏆</span>
                 <span className="font-bold text-accent text-lg">Final Puan Tablosu (Top 5)</span>
               </div>
+              {/* Final puan tablosu */}
               <div className="w-full flex flex-col gap-2 mb-2">
                 {Array.isArray(scoreboard) && scoreboard.sort((a, b) => b.score - a.score).slice(0, 5).map((entry, i) => {
                   const cup = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
@@ -147,6 +153,7 @@ function LiveQuizTeacherPage() {
         ) : (
           <div className="w-full max-w-2xl bg-base dark:bg-base-dark rounded-2xl shadow-lg p-10 flex flex-col items-center border border-neutral dark:border-neutral-dark">
             <h1 className="text-2xl md:text-3xl font-extrabold mb-4 text-primary dark:text-primary-light text-center"><span role="img" aria-label="beyin">🧠</span> Öğretmen Quiz Ekranı</h1>
+            {/* Soru ve sayaç */}
             {questionData && !correctOption && (
               <div className="mb-4 w-full flex flex-row items-center justify-between">
                 <span className="text-lg font-semibold text-primary dark:text-primary-light">Kalan Süre:</span>
@@ -155,7 +162,9 @@ function LiveQuizTeacherPage() {
                 </span>
               </div>
             )}
+            {/* Geri sayım */}
             {countdown && <h2 className="text-xl font-semibold mb-4 text-primary dark:text-primary-light animate-pulse">{countdown}</h2>}
+            {/* Soru ve seçenekler */}
             {questionData && (
               <>
                 <h2 className="text-lg font-bold mb-2 text-primary dark:text-primary-light text-center">Soru {questionData.index}/{questionData.total}</h2>
@@ -190,6 +199,7 @@ function LiveQuizTeacherPage() {
                 </ul>
               </>
             )}
+            {/* Cevap dağılımı ve doğru cevap */}
             {answerStats && !showScoreboard && !showFinal && (
               <div className="w-full mb-4 flex flex-col gap-4">
                 {/* Doğru Cevap Kutusu */}
@@ -221,6 +231,7 @@ function LiveQuizTeacherPage() {
                 </div>
               </div>
             )}
+            {/* Puan tablosu */}
             {showScoreboard && !showFinal && (
               <div className="w-full mb-4 bg-base/80 dark:bg-base-dark/80 rounded-xl p-4 border border-accent/30 dark:border-accent/40 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">

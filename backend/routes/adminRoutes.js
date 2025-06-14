@@ -7,16 +7,37 @@ const Quiz = require('../models/Quiz');
 const Session = require('../models/Session');
 const QuizResult = require('../models/QuizResult');
 
-// Tüm kullanıcıları getir
+// Tüm kullanıcıları getirir (sadece admin)
 router.get('/users', protect, adminOnly, async (req, res) => {
-  const users = await User.find().select('-password');
-  res.json(users);
+  try {
+    // Tüm kullanıcılar çekiliyor
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Kullanıcılar alınamadı.' });
+  }
 });
 
-// Tüm quizleri getir
+// Tüm quizleri getirir (sadece admin)
 router.get('/quizzes', protect, adminOnly, async (req, res) => {
-  const quizzes = await Quiz.find().populate('createdBy', 'username');
-  res.json(quizzes);
+  try {
+    // Tüm quizler çekiliyor
+    const quizzes = await Quiz.find().populate('createdBy', 'username');
+    res.json(quizzes);
+  } catch (error) {
+    res.status(500).json({ message: 'Quizler alınamadı.' });
+  }
+});
+
+// Tüm quiz sonuçlarını getirir (sadece admin)
+router.get('/results', protect, adminOnly, async (req, res) => {
+  try {
+    // Tüm quiz sonuçları çekiliyor
+    const results = await QuizResult.find();
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ message: 'Sonuçlar alınamadı.' });
+  }
 });
 
 // Genel analiz verisi

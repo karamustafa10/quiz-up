@@ -1,8 +1,10 @@
 // src/socket.js
 import { io } from 'socket.io-client';
 
+// Kullanıcı bilgisini localStorage'dan al
 const user = JSON.parse(localStorage.getItem('user'));
 
+// Socket bağlantısı oluştur
 const socket = io('http://localhost:5000', {
   transports: ['websocket'],
   auth: {
@@ -10,4 +12,5 @@ const socket = io('http://localhost:5000', {
   }
 });
 
+// Socket nesnesini dışa aktar
 export default socket;

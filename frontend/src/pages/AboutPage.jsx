@@ -13,28 +13,28 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 export default function AboutPage() {
-  // State for storing user data
+  // Kullanıcı state'i
   const [user, setUser] = useState(null);
 
-  // Check for existing user session on component mount
+  // Kullanıcı oturumunu kontrol et
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
   }, []);
 
-  // Handle user logout
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     window.location.href = '/login';
   };
 
-  // Handle profile edit notification
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     alert('Profil düzenleme sadece panelde yapılabilir.');
   };
 
-  // Step-by-step guide for using the platform
+  // Platform kullanım rehberi
   const howToPlay = [
     { emoji: '📝', text: 'Kayıt ol veya giriş yap.' },
     { emoji: '👩‍🏫', text: 'Öğretmensen yeni bir quiz oluştur, sorular ekle ve başlat.' },
@@ -53,6 +53,7 @@ export default function AboutPage() {
           <p className="text-lg md:text-xl mb-6 font-medium text-neutral-dark dark:text-neutral text-center animate-fade-in delay-100">
             <b>QuizUp</b> <span className="inline-block">🚀</span>, öğretmenler ve öğrenciler için geliştirilmiş, canlı ve etkileşimli bir quiz platformudur. Gerçek zamanlı yarışmalar, anlık puan tablosu ve eğlenceli rekabet ortamı sunar.
           </p>
+          {/* Platform özellikleri */}
           <ul className="mb-8 w-full text-neutral-dark dark:text-neutral text-base list-disc pl-6 space-y-2">
             <li className="transition-transform duration-300 hover:scale-105">👩‍🏫 <b>Öğretmenler</b> kolayca quiz oluşturabilir, sorular ekleyebilir ve öğrencileri davet edebilir.</li>
             <li className="transition-transform duration-300 hover:scale-105">🧑‍🎓 <b>Öğrenciler</b> hızlıca quizlere katılır, soruları cevaplar ve puan toplar.</li>
@@ -61,6 +62,7 @@ export default function AboutPage() {
             <li className="transition-transform duration-300 hover:scale-105">📱 Modern, mobil uyumlu ve kullanıcı dostu arayüz ile kolay kullanım.</li>
           </ul>
           <h2 className="text-2xl font-bold mb-4 text-primary-dark dark:text-primary flex items-center gap-2 animate-fade-in delay-200">🤔 Nasıl Oynanır?</h2>
+          {/* Kullanım rehberi adımları */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full">
             {howToPlay.map((step, idx) => (
               <div
@@ -79,6 +81,7 @@ export default function AboutPage() {
         </div>
       </main>
       <Footer />
+      {/* Animasyonlar için stil */}
       <style>{`
         .animate-fade-in {
           opacity: 0;

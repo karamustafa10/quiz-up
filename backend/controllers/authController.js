@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Kullanıcı kayıt
+// Kullanıcı kayıt işlemi
 const registerUser = async (req, res) => {
     try {
         const { username, email, password, role } = req.body;
@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Kullanıcı giriş
+// Kullanıcı giriş işlemi
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;

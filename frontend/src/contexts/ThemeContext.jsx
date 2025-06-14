@@ -12,9 +12,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
+// Tema sağlayıcı fonksiyonu
 export function ThemeProvider({ children }) {
+  // Tema state'i (localStorage'dan alınır veya varsayılan 'light')
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
 
+  // Tema değiştiğinde localStorage ve HTML class güncellemesi
   useEffect(() => {
     localStorage.setItem('theme', theme);
     if (theme === 'dark') {
@@ -24,6 +27,7 @@ export function ThemeProvider({ children }) {
     }
   }, [theme]);
 
+  // Tema değiştirici fonksiyon
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   return (
@@ -33,6 +37,7 @@ export function ThemeProvider({ children }) {
   );
 }
 
+// Tema context'ini kullanan hook
 export function useTheme() {
   return useContext(ThemeContext);
 } 

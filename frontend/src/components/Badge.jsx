@@ -1,5 +1,8 @@
 import React from 'react';
+
+// Küçük rozet (badge) bileşeni
 export default function Badge({ children, color = 'primary' }) {
+  // Renk haritası
   const colorMap = {
     primary: 'bg-primary text-white dark:bg-primary-dark dark:text-white',
     success: 'bg-success text-white dark:bg-success-dark dark:text-white',
@@ -9,6 +12,7 @@ export default function Badge({ children, color = 'primary' }) {
     accent: 'bg-accent text-white dark:bg-accent-dark dark:text-white',
   };
   return (
+    // Rozet kutusu
     <span className={`inline-block px-4 py-1 rounded-full text-xs font-bold ${colorMap[color]}`}>{children}</span>
   );
 } 

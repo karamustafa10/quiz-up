@@ -1,13 +1,14 @@
+// Quiz'e katılım sayfası
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Loader from '../components/Loader';
 import { useNotification } from '../contexts/NotificationContext';
 
 function JoinQuizPage() {
+  // State ve hook'lar
   const [joinCode, setJoinCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,11 +16,13 @@ function JoinQuizPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
+  // Kullanıcı bilgisini yükle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
   }, []);
 
+  // Katılım kodu ile quiz'e katılma işlemi
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -47,12 +50,14 @@ function JoinQuizPage() {
     }
   };
 
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };
@@ -64,6 +69,7 @@ function JoinQuizPage() {
         <div className="w-full max-w-md bg-base dark:bg-base-dark rounded-2xl shadow-lg p-10 flex flex-col items-center border border-neutral dark:border-neutral-dark">
           <h2 className="text-3xl font-extrabold mb-6 text-primary-dark dark:text-primary text-center">Quiz'e Katıl</h2>
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
+            {/* Katılım kodu inputu */}
             <input
               type="text"
               placeholder="Katılım Kodu"

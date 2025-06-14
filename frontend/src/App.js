@@ -1,3 +1,4 @@
+// Uygulamanın ana router ve sayfa yönlendirme dosyası
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -16,9 +17,11 @@ import AdminPanelPage from './pages/AdminPanelPage';
 import AboutPage from './pages/AboutPage';
 
 function App() {
+  // Kullanıcı bilgisini localStorage'dan al
   const user = JSON.parse(localStorage.getItem('user'));
 
   return (
+    // Tüm uygulama için router ve route tanımları
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -28,11 +31,13 @@ function App() {
         <Route path="/create-quiz" element={<CreateQuizPage />} />
         <Route path="/join-quiz" element={<JoinQuizPage />} />
         <Route path="/select-quiz" element={<SelectQuizPage />} />
+        {/* Quiz lobisi, kullanıcı rolüne göre yönlendirme */}
         <Route path="/quiz-lobby/:sessionId" element={
           user?.role === 'teacher'
             ? <TeacherLobbyPage />
             : <StudentLobbyPage />
         } />
+        {/* Canlı quiz ekranı, kullanıcı rolüne göre yönlendirme */}
         <Route path="/live-quiz/:sessionId" element={
           user?.role === 'teacher'
             ? <LiveQuizTeacherPage />

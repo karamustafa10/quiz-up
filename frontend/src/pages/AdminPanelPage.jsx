@@ -1,3 +1,4 @@
+// Admin paneli sayfası (kullanıcı, quiz ve analiz yönetimi)
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Bar, Pie } from 'react-chartjs-2';
@@ -19,6 +20,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Le
 const getIsDarkMode = () => document.documentElement.classList.contains('dark');
 
 function AdminPanelPage() {
+  // State ve hook'lar
   const [tab, setTab] = useState('users');
   const [users, setUsers] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
@@ -34,6 +36,7 @@ function AdminPanelPage() {
   const navigate = useNavigate();
   const [confirmDialog, setConfirmDialog] = useState({ open: false, message: '', onConfirm: null });
 
+  // Kullanıcı ve tema değişimini dinle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
@@ -44,9 +47,11 @@ function AdminPanelPage() {
     return () => observer.disconnect();
   }, []);
 
+  // Grafik renkleri
   const chartTextColor = isDarkMode ? '#fff' : '#222';
   const chartGridColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
 
+  // Kullanıcı silme işlemi
   const handleDeleteUser = async (id) => {
     setConfirmDialog({
       open: true,
@@ -69,6 +74,7 @@ function AdminPanelPage() {
     });
   };
 
+  // Quiz silme işlemi
   const handleDeleteQuiz = async (id) => {
     setConfirmDialog({
       open: true,
@@ -91,6 +97,7 @@ function AdminPanelPage() {
     });
   };
 
+  // Tab değişiminde ilgili verileri çek
   useEffect(() => {
     setLoading(true);
     if (tab === 'users') {
@@ -108,12 +115,14 @@ function AdminPanelPage() {
     }
   }, [tab, token]);
 
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };
@@ -133,6 +142,7 @@ function AdminPanelPage() {
             </div>
             {/* İçerikler */}
             {loading && <div className="flex justify-center my-8"><Loader size={10} /></div>}
+            {/* Kullanıcılar sekmesi */}
             {!loading && tab === 'users' && (
               <>
                 <input
@@ -161,6 +171,7 @@ function AdminPanelPage() {
                 </ul>
               </>
             )}
+            {/* Quizler sekmesi */}
             {!loading && tab === 'quizzes' && (
               <>
                 <div className="flex flex-col md:flex-row gap-2 w-full mb-4">
@@ -201,6 +212,7 @@ function AdminPanelPage() {
                 </ul>
               </>
             )}
+            {/* Analiz sekmesi */}
             {!loading && tab === 'analytics' && analytics && (
               <div className="w-full flex flex-col items-center">
                 <h3 className="text-xl font-bold mb-4 text-primary-dark dark:text-primary">Genel Analiz</h3>
@@ -250,12 +262,9 @@ function AdminPanelPage() {
                     options={{
                       responsive: true,
                       plugins: {
-                        legend: {
-                          labels: { color: chartTextColor }
-                        },
+                        legend: { labels: { color: chartTextColor } },
                         title: { color: chartTextColor },
                       },
-                      backgroundColor: 'transparent',
                     }}
                   />
                 </div>
@@ -265,19 +274,10 @@ function AdminPanelPage() {
         </div>
       </main>
       <Footer />
-      {notification && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          onClose={closeNotification}
-        />
-      )}
-      <ConfirmDialog
-        open={confirmDialog.open}
-        message={confirmDialog.message}
-        onConfirm={confirmDialog.onConfirm}
-        onCancel={() => setConfirmDialog({ ...confirmDialog, open: false })}
-      />
+      {/* Onay kutusu */}
+      <ConfirmDialog {...confirmDialog} onCancel={() => setConfirmDialog({ ...confirmDialog, open: false })} />
+      {/* Bildirim kutusu */}
+      <Notification {...notification} onClose={closeNotification} />
     </div>
   );
 }

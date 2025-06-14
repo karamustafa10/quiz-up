@@ -10,9 +10,12 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 
 const NotificationContext = createContext();
 
+// Bildirim sağlayıcı fonksiyonu
 export function NotificationProvider({ children }) {
+  // Bildirim state'i
   const [notification, setNotification] = useState(null);
 
+  // Bildirim gösterme fonksiyonu
   const showNotification = useCallback((message, type = 'info', duration = 3000) => {
     setNotification({ message, type });
     if (duration) {
@@ -20,6 +23,7 @@ export function NotificationProvider({ children }) {
     }
   }, []);
 
+  // Bildirimi kapatma fonksiyonu
   const closeNotification = () => setNotification(null);
 
   return (
@@ -29,6 +33,7 @@ export function NotificationProvider({ children }) {
   );
 }
 
+// Notification context'ini kullanan hook
 export function useNotification() {
   return useContext(NotificationContext);
 } 

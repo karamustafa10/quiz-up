@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Renk seçenekleri
 const COLORS = {
   primary: 'bg-primary text-white hover:bg-primary-dark hover:text-white dark:bg-primary-dark dark:text-white dark:hover:bg-primary',
   accent: 'bg-accent text-white hover:bg-accent-dark hover:text-white dark:bg-accent-dark dark:text-white dark:hover:bg-accent',
@@ -9,6 +10,7 @@ const COLORS = {
   neutral: 'bg-neutral text-neutral-dark hover:bg-neutral-dark hover:text-white dark:bg-base-dark dark:text-neutral dark:hover:bg-neutral dark:hover:text-black',
 };
 
+// Buton fonksiyonu
 function Button({
   children,
   color = 'primary',
@@ -18,6 +20,7 @@ function Button({
   disabled = false,
   ...props
 }) {
+  // Boyutlara göre class
   const sizeClasses = size === 'lg'
     ? 'py-3 px-8 text-lg'
     : size === 'md'
@@ -25,11 +28,13 @@ function Button({
     : 'py-1.5 px-4 text-sm';
 
   return (
+    // Buton kutusu
     <button
       className={`flex justify-center items-center rounded-2xl font-extrabold shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200 ${COLORS[color] || COLORS.primary} ${sizeClasses} ${className} ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
       disabled={disabled || loading}
       {...props}
     >
+      {/* Yükleniyor animasyonu */}
       {loading ? (
         <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin align-middle mr-2"></span>
       ) : null}

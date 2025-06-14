@@ -1,3 +1,4 @@
+// Quiz seçme ve başlatma sayfası (öğretmenler için)
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,11 +7,13 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function SelectQuizPage() {
+  // State ve hook'lar
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Kullanıcı ve quiz listesini yükle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
@@ -29,6 +32,7 @@ function SelectQuizPage() {
     fetchQuizzes();
   }, []);
 
+  // Quiz başlatma işlemi
   const handleStartSession = async (quiz) => {
     try {
       const token = localStorage.getItem('token');
@@ -43,12 +47,14 @@ function SelectQuizPage() {
     } catch (err) {}
   };
 
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     alert('Profil düzenleme sadece panelde yapılabilir.');
   };
@@ -59,6 +65,7 @@ function SelectQuizPage() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 w-full">
         <div className="w-full max-w-2xl bg-base dark:bg-base-dark rounded-2xl shadow-lg p-10 flex flex-col items-center border border-neutral dark:border-neutral-dark">
           <h2 className="text-3xl font-extrabold mb-8 text-primary-dark dark:text-primary text-center">Quiz Seçimi</h2>
+          {/* Quiz listesi */}
           {loading ? (
             <p className="text-neutral-dark dark:text-neutral text-center">Yükleniyor...</p>
           ) : quizzes.length === 0 ? (

@@ -22,17 +22,17 @@ import StudentDashboard from '../components/StudentDashboard';
 import AdminDashboard from '../components/AdminDashboard';
 
 function DashboardPage() {
-  // Navigation and notification hooks
+  // Navigasyon ve bildirim hook'ları
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  // Component state management
+  // Kullanıcı ve modal state'leri
   const [user, setUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [profileData, setProfileData] = useState({ username: '', email: '' });
   const [loading, setLoading] = useState(false);
 
-  // Check authentication and load user data
+  // Kullanıcı oturumunu kontrol et ve verileri yükle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     if (userData) {
@@ -43,24 +43,24 @@ function DashboardPage() {
     }
   }, [navigate]);
 
-  // Handle user logout
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/login');
   };
 
-  // Open profile edit modal
+  // Profil düzenleme modalını aç
   const handleProfileEdit = () => {
     setModalOpen(true);
   };
 
-  // Handle profile form input changes
+  // Profil formu değişikliklerini işle
   const handleProfileChange = (e) => {
     setProfileData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle profile form submission
+  // Profil kaydetme işlemi
   const handleProfileSave = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -73,7 +73,7 @@ function DashboardPage() {
     }, 1000);
   };
 
-  // Show loading state while user data is being fetched
+  // Kullanıcı verisi yüklenene kadar loader göster
   if (!user) {
     return <div className="flex items-center justify-center min-h-screen"><Loader size={12} /></div>;
   }
@@ -90,6 +90,7 @@ function DashboardPage() {
           {user.role === 'student' && <StudentDashboard />}
           {user.role === 'admin' && <AdminDashboard />}
         </div>
+        {/* Profil düzenleme modalı */}
         <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
           <h2 className="text-xl font-bold mb-4 text-primary-dark dark:text-primary">Profili Düzenle</h2>
           <form onSubmit={handleProfileSave} className="flex flex-col gap-4">

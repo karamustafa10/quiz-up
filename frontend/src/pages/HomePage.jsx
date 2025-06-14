@@ -15,25 +15,25 @@ import Footer from '../components/Footer';
 import { useNotification } from '../contexts/NotificationContext';
 
 function HomePage() {
-  // State for storing user data
+  // Kullanıcı state'i ve hook'lar
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  // Check for existing user session on component mount
+  // Kullanıcı oturumunu kontrol et
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
   }, []);
 
-  // Handle user logout
+  // Çıkış işlemi
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  // Handle profile edit notification
+  // Profil düzenleme bildirimi
   const handleProfileEdit = () => {
     showNotification('Profil düzenleme sadece panelde yapılabilir.', 'info');
   };

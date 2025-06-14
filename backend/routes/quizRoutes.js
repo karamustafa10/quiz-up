@@ -6,11 +6,13 @@ const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/upload');
 const { createQuiz, joinQuiz } = require('../controllers/quizController');
 
-
+// Quiz oluşturma endpoint'i
 router.post('/create', protect, createQuiz);
 
+// Quiz'e katılım endpoint'i
 router.get('/join/:code', async (req, res) => {
   try {
+    // Katılım koduna göre oturum ve quiz bilgisi çekiliyor
     const session = await Session.findOne({ joinCode: req.params.code }).populate('quizId');
 
     if (!session) {

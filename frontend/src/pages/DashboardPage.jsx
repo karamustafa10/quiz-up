@@ -20,6 +20,7 @@ import { useNotification } from '../contexts/NotificationContext';
 import TeacherDashboard from '../components/TeacherDashboard';
 import StudentDashboard from '../components/StudentDashboard';
 import AdminDashboard from '../components/AdminDashboard';
+import { updateProfile } from '../services/authService';
 
 function DashboardPage() {
   // Navigasyon ve bildirim hook'ları
@@ -29,15 +30,16 @@ function DashboardPage() {
   // Kullanıcı ve modal state'leri
   const [user, setUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [profileData, setProfileData] = useState({ username: '', email: '' });
+  const [profileData, setProfileData] = useState({ username: '', email: '', password: '', passwordConfirm: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Kullanıcı oturumunu kontrol et ve verileri yükle
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     if (userData) {
       setUser(userData);
-      setProfileData({ username: userData.username, email: userData.email });
+      setProfileData({ username: userData.username, email: userData.email, password: '', passwordConfirm: '' });
     } else {
       navigate('/login');
     }
@@ -52,6 +54,9 @@ function DashboardPage() {
 
   // Profil düzenleme modalını aç
   const handleProfileEdit = () => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    setProfileData({ username: userData.username, email: userData.email, password: '', passwordConfirm: '' });
+    setError('');
     setModalOpen(true);
   };
 
@@ -61,16 +66,32 @@ function DashboardPage() {
   };
 
   // Profil kaydetme işlemi
-  const handleProfileSave = (e) => {
+  const handleProfileSave = async (e) => {
     e.preventDefault();
+    setError('');
+    if (profileData.password && profileData.password !== profileData.passwordConfirm) {
+      setError('Şifreler eşleşmiyor!');
+      return;
+    }
     setLoading(true);
-    setTimeout(() => {
-      setUser((prev) => ({ ...prev, ...profileData }));
-      localStorage.setItem('user', JSON.stringify({ ...user, ...profileData }));
-      setLoading(false);
+    try {
+      const token = localStorage.getItem('token');
+      const payload = {
+        username: profileData.username,
+        email: profileData.email,
+        ...(profileData.password ? { password: profileData.password } : {})
+      };
+      await updateProfile(payload, token);
+      const updatedUser = { ...user, username: profileData.username, email: profileData.email };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       setModalOpen(false);
       showNotification('Profil başarıyla güncellendi!', 'success');
-    }, 1000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Profil güncellenemedi.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Kullanıcı verisi yüklenene kadar loader göster
@@ -112,6 +133,25 @@ function DashboardPage() {
               required
               placeholder="Email"
             />
+            <input
+              type="password"
+              name="password"
+              value={profileData.password}
+              onChange={handleProfileChange}
+              className="py-2 px-4 rounded-xl border border-neutral dark:border-neutral-dark bg-base dark:bg-base-dark text-neutral-dark dark:text-neutral text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+              placeholder="Yeni Şifre (değiştirmek için)"
+              autoComplete="new-password"
+            />
+            <input
+              type="password"
+              name="passwordConfirm"
+              value={profileData.passwordConfirm}
+              onChange={handleProfileChange}
+              className="py-2 px-4 rounded-xl border border-neutral dark:border-neutral-dark bg-base dark:bg-base-dark text-neutral-dark dark:text-neutral text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+              placeholder="Yeni Şifreyi Doğrula"
+              autoComplete="new-password"
+            />
+            {error && <div className="text-danger text-sm font-semibold">{error}</div>}
             <Button color="primary" type="submit" loading={loading} disabled={loading}>Kaydet</Button>
           </form>
         </Modal>

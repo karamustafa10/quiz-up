@@ -55,6 +55,7 @@ const loginUser = async (req, res) => {
         const payload = {
             id: user._id,
             username: user.username,
+            email: user.email,
             role: user.role
         };
 
@@ -71,7 +72,29 @@ const loginUser = async (req, res) => {
     }
 };
 
+// Kullanıcı profilini güncelleme
+const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { username, email, password } = req.body;
+        const updateFields = { username, email };
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            updateFields.password = await bcrypt.hash(password, salt);
+        }
+        const updatedUser = await User.findByIdAndUpdate(userId, updateFields, { new: true, runValidators: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Kullanıcı bulunamadı.' });
+        }
+        res.json({ message: 'Profil güncellendi.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Profil güncellenemedi.' });
+    }
+};
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    updateProfile
 };

@@ -13,3 +13,12 @@ export const register = async (userData) => {
 export const login = async (userData) => {
   return await axios.post(`${API_URL}/login`, userData);
 };
+
+// Profil güncelleme fonksiyonu
+export const updateProfile = async (data, token) => {
+  return await axios.put(
+    'http://localhost:5000/api/auth/update-profile',
+    data,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};

@@ -9,7 +9,6 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import Badge from '../components/Badge';
 import Loader from '../components/Loader';
-import Notification from '../components/Notification';
 import { useNotification } from '../contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -32,7 +31,7 @@ function AdminPanelPage() {
   const [isDarkMode, setIsDarkMode] = useState(getIsDarkMode());
   const [user, setUser] = useState(null);
   const token = localStorage.getItem('token');
-  const { notification, showNotification, closeNotification } = useNotification();
+  const { showNotification, closeNotification } = useNotification();
   const navigate = useNavigate();
   const [confirmDialog, setConfirmDialog] = useState({ open: false, message: '', onConfirm: null });
 
@@ -45,6 +44,12 @@ function AdminPanelPage() {
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     return () => observer.disconnect();
+  }, []);
+
+  // Admin paneli açıldığında eski bildirimi temizle
+  useEffect(() => {
+    closeNotification();
+    // eslint-disable-next-line
   }, []);
 
   // Grafik renkleri
@@ -276,8 +281,6 @@ function AdminPanelPage() {
       <Footer />
       {/* Onay kutusu */}
       <ConfirmDialog {...confirmDialog} onCancel={() => setConfirmDialog({ ...confirmDialog, open: false })} />
-      {/* Bildirim kutusu */}
-      <Notification {...notification} onClose={closeNotification} />
     </div>
   );
 }

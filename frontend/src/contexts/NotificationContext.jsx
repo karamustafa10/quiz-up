@@ -6,7 +6,7 @@
  * ve belirli bir süre sonra otomatik olarak kapanır.
  */
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 const NotificationContext = createContext();
 
@@ -14,17 +14,39 @@ const NotificationContext = createContext();
 export function NotificationProvider({ children }) {
   // Bildirim state'i
   const [notification, setNotification] = useState(null);
+  const timerRef = useRef();
 
   // Bildirim gösterme fonksiyonu
   const showNotification = useCallback((message, type = 'info', duration = 3000) => {
     setNotification({ message, type });
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     if (duration) {
-      setTimeout(() => setNotification(null), duration);
+      timerRef.current = setTimeout(() => {
+        setNotification(null);
+        timerRef.current = null;
+      }, duration);
     }
   }, []);
 
   // Bildirimi kapatma fonksiyonu
-  const closeNotification = () => setNotification(null);
+  const closeNotification = () => {
+    setNotification(null);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  // Unmount olduğunda timer'ı temizle
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <NotificationContext.Provider value={{ notification, showNotification, closeNotification }}>

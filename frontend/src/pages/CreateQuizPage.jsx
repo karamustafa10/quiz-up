@@ -73,7 +73,7 @@ function CreateQuizPage() {
     formData.append('file', file);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/quiz/upload-media', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/upload-media`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`

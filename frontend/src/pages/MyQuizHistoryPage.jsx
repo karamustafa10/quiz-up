@@ -22,7 +22,7 @@ function MyQuizHistory() {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:5000/api/results/my-history', {
+    axios.get(`${process.env.REACT_APP_API_URL}/api/results/my-history`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setResults(res.data))

@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 const user = JSON.parse(localStorage.getItem('user'));
 
 // Socket bağlantısı oluştur
-const socket = io('http://localhost:5000', {
+const socket = io(process.env.REACT_APP_API_URL, {
   transports: ['websocket'],
   auth: {
     username: user?.username || 'Bilinmeyen Kullanıcı'

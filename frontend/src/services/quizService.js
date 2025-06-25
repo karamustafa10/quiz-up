@@ -3,7 +3,7 @@ import axios from 'axios';
 // Quiz ile ilgili servis fonksiyonları
 
 // API ana URL'i
-const API_URL = 'http://localhost:5000/api/quiz'; // Backend route'umuz bu olacak
+const API_URL = process.env.REACT_APP_API_URL + '/api/quiz'; // Backend route'umuz bu olacak
 
 // Quiz oluşturma fonksiyonu
 export const createQuiz = (quizData) => {

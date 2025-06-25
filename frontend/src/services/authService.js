@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // API ana URL'i
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = process.env.REACT_APP_API_URL + '/api/auth';
 
 // Kayıt olma fonksiyonu
 export const register = async (userData) => {
@@ -17,7 +17,7 @@ export const login = async (userData) => {
 // Profil güncelleme fonksiyonu
 export const updateProfile = async (data, token) => {
   return await axios.put(
-    'http://localhost:5000/api/auth/update-profile',
+    `${process.env.REACT_APP_API_URL}/api/auth/update-profile`,
     data,
     { headers: { Authorization: `Bearer ${token}` } }
   );

@@ -34,7 +34,7 @@ function JoinQuizPage() {
       return;
     }
     try {
-      const response = await axios.get(`http://localhost:5000/api/quiz/join/${joinCode}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/quiz/join/${joinCode}`);
       if (response.status === 200) {
         const { sessionId, quiz } = response.data;
         localStorage.setItem('currentQuiz', JSON.stringify(quiz));

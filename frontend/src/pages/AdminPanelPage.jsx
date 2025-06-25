@@ -65,7 +65,7 @@ function AdminPanelPage() {
         setConfirmDialog({ ...confirmDialog, open: false });
         try {
           setLoading(true);
-          await axios.delete(`http://localhost:5000/api/admin/user/${id}`, {
+          await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/user/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUsers(prev => prev.filter(user => user._id !== id));
@@ -88,7 +88,7 @@ function AdminPanelPage() {
         setConfirmDialog({ ...confirmDialog, open: false });
         try {
           setLoading(true);
-          await axios.delete(`http://localhost:5000/api/admin/quiz/${id}`, {
+          await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setQuizzes(prev => prev.filter(quiz => quiz._id !== id));
@@ -106,15 +106,15 @@ function AdminPanelPage() {
   useEffect(() => {
     setLoading(true);
     if (tab === 'users') {
-      axios.get('http://localhost:5000/api/admin/users', {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => setUsers(res.data)).finally(() => setLoading(false));
     } else if (tab === 'quizzes') {
-      axios.get('http://localhost:5000/api/admin/quizzes', {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/admin/quizzes`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => setQuizzes(res.data)).finally(() => setLoading(false));
     } else if (tab === 'analytics') {
-      axios.get('http://localhost:5000/api/admin/analytics', {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/admin/analytics`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => setAnalytics(res.data)).finally(() => setLoading(false));
     }

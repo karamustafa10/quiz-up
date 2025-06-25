@@ -48,7 +48,7 @@ function TeacherLobbyPage() {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/session/${sessionId}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/session/${sessionId}`);
         setQuizTitle(res.data.quiz?.title || 'Quiz');
         setJoinCode(res.data.joinCode);
       } catch (err) {
@@ -71,7 +71,7 @@ function TeacherLobbyPage() {
       }
 
       await axios.post(
-        `http://localhost:5000/api/session/start`,
+        `${process.env.REACT_APP_API_URL}/api/session/start`,
         { quizId: currentQuiz._id },
         {
           headers: {

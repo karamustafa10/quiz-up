@@ -46,7 +46,7 @@ router.post('/upload-media', protect, upload.single('file'), (req, res) => {
     return res.status(400).json({ message: 'Dosya yüklenemedi.' });
   }
 
-  const fileUrl = `http://localhost:5000/uploads/${req.file.filename}`; // URL olarak döner
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`; // URL olarak döner
   res.json({ url: fileUrl });
 });
 

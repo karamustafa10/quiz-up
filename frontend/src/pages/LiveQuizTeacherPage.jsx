@@ -27,7 +27,7 @@ function LiveQuizTeacherPage() {
   useEffect(() => {
     const fetchQuizInfo = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/session/${sessionId}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/session/${sessionId}`);
         setQuizTitle(res.data.quiz?.title || 'Quiz');
         setCreatorName(res.data.quiz?.createdBy?.username || 'Bilinmeyen');
       } catch (err) {}

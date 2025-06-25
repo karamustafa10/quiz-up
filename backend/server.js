@@ -12,15 +12,28 @@ const QuizResult = require('./models/QuizResult');
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  'https://quiz-up-nine.vercel.app', // Vercel frontend domainin
+  // başka domainler eklenebilir
+];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

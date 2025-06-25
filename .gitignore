@@ -14,7 +14,7 @@ node_modules/
 
 # Backend
 backend/node_modules/
-backend/uploads/
+# backend/uploads/
 backend/.env
 backend/.env.*
 
